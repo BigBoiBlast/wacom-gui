@@ -510,10 +510,7 @@ class ButtonGroup(QObject):
         self.buttons[(idx, 1)] = dev
         self.buttons[(idx, 2)] = wid
         self.buttons[(idx, 3)] = dev_id
-        try:
-          self.buttons[(idx, 0)].clicked[()].connect(self.buttonMapper.map)
-        except Exception as e:
-          print(e)
+        self.buttons[(idx, 0)].clicked.connect(self.buttonMapper.map)
         if label.split("Wacom ").__len__() == 2:
             self.buttons[(idx, 0)].setText(QString(label[6:]))
         else:
