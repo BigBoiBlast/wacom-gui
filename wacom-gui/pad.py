@@ -4,9 +4,10 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
-from PyQt4.QtSvg import *
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
+from PyQt5.QtSvg import *
+from PyQt5.QtWidgets import *
 from hotkeys import HotkeyWidget
 from stylus import WacomAttribSlider
 import pad_ui
@@ -96,14 +97,15 @@ class Pad(QTabWidget, pad_ui.Ui_PadWidget):
             f.close()
             os.popen("dconf load /org/mate/desktop/keybindings/ < %s" % config)
         except Exception as e:
-            print e
+            print(e)
 
     def _load_keyboard_shortcuts(self):
         custom = {}
         p = subprocess.Popen("dconf dump /org/mate/desktop/keybindings/", shell=True, stdout=subprocess.PIPE)
         p.wait()
-        output = p.communicate()[0].split('\n')
+        output = p.communicate()[0].splitlines()
         for line in output:
+            line = line.decode('UTF-8')
             if '[custom' in line:
                 entry = line[1:-1]
                 custom[entry] = {}
@@ -131,8 +133,8 @@ class Pad(QTabWidget, pad_ui.Ui_PadWidget):
         # add buttons
         but_loc = {}
         for bid in sorted(buttons.keys()):
-            but_loc[bid] = buttons[bid]['pos']
-        for bid, value in sorted(but_loc.iteritems(), key=lambda (k, v): (v, k)):
+            but_loc[bid] = buttons[bid] #buttons[bid]['pos']
+        for bid, value in sorted(but_loc.items()):#, key=lambda: (k, v) (v, k)):
             if cmds.__len__() == 0:
                 keystroke = "Default"
             else:
@@ -327,7 +329,7 @@ class Touch(QWidget):
                         text = "%s - %s" % (control, data[fingers][control]['text'])
                         self.guide.addWidget(GuideWidget(data[fingers][control]['icon'], text))
         except Exception as e:
-            print e
+            print(e)
         group = QGroupBox("Touch Controls")
         group.setFixedSize(290, 80)
         group.setLayout(touch)

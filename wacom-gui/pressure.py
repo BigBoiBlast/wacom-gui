@@ -1,20 +1,20 @@
 #!/usr/bin/python
 
-#from PyQt4.QtGui import QWidget, QPolygonF, QPainter, QPen, QBrush, QColor, \
+#from PyQt5.QtWidgets import QWidget, QPolygonF, QPainter, QPen, QBrush, QColor, \
 #    QApplication, QIcon, QVBoxLayout, QHBoxLayout, QPushButton, QPainterPath,\
 #    QFont, QLayout, QGraphicsScene, QGraphicsView, QPixmap, QGraphicsPixmapItem, \
 #    QTabletEvent, QLabel, QSplitter, QRadialGradient, QImage
-#from PyQt4.QtCore import QObject, SIGNAL, SLOT, QPointF, Qt, QRectF, QPointF, QString, QRect
-from PyQt4 import QtCore,QtGui
+#from PyQt5.QtCore import QObject, SIGNAL, SLOT, QPointF, Qt, QRectF, QPointF, QString, QRect
+from PyQt5 import QtCore,QtWidgets
 import sys, os
 
-class pressureSettings(QtGui.QWidget):
+class pressureSettings(QtWidgets.QWidget):
     def __init__(self, tabletName, parent=None):
-        QtGui.QWidget.__init__(self, parent)
+        QtWidgets.QWidget.__init__(self, parent)
         self.setFixedSize(300, 300)
 
         self.tabletName = tabletName
-        mainLayout = QtGui.QHBoxLayout()
+        mainLayout = QtWidgets.QHBoxLayout()
         mainLayout.setAlignment(QtCore.Qt.AlignLeft)
         self.setLayout(mainLayout)
 
@@ -26,26 +26,26 @@ class pressureSettings(QtGui.QWidget):
         #self.setWindowTitle('Bonus Example')
 
     def paintEvent(self, event):
-        painter = QtGui.QPainter(self)
-        painter.setRenderHints(QtGui.QPainter.Antialiasing)
+        painter = QtWidgets.QPainter(self)
+        painter.setRenderHints(QtWidgets.QPainter.Antialiasing)
 
-        painter.fillRect(QtCore.QRectF(50, 50, 200, 200), QtGui.QBrush(QtGui.QColor(QtGui.QColor(110, 110, 110))))
-        painter.fillRect(QtCore.QRectF(50, 50, 200, 200), QtGui.QBrush(QtCore.Qt.CrossPattern))
+        painter.fillRect(QtCore.QRectF(50, 50, 200, 200), QtWidgets.QBrush(QtWidgets.QColor(QtWidgets.QColor(110, 110, 110))))
+        painter.fillRect(QtCore.QRectF(50, 50, 200, 200), QtWidgets.QBrush(QtCore.Qt.CrossPattern))
 
-        painter.setPen(QtGui.QPen(QtGui.QColor(QtCore.Qt.lightGray), 2, QtCore.Qt.SolidLine))
-        path = QtGui.QPainterPath()
+        painter.setPen(QtWidgets.QPen(QtWidgets.QColor(QtCore.Qt.lightGray), 2, QtCore.Qt.SolidLine))
+        path = QtWidgets.QPainterPath()
         path.moveTo(50, 250)
         path.cubicTo(self.points[0][0], self.points[0][1], self.points[1][0], self.points[1][1], 250, 50)
         painter.drawPath(path)
 
-        painter.setBrush(QtGui.QBrush(QtGui.QColor(QtCore.Qt.darkCyan)))
-        painter.setPen(QtGui.QPen(QtGui.QColor(QtCore.Qt.lightGray), 1))
+        painter.setBrush(QtWidgets.QBrush(QtWidgets.QColor(QtCore.Qt.darkCyan)))
+        painter.setPen(QtWidgets.QPen(QtWidgets.QColor(QtCore.Qt.lightGray), 1))
 
 
         #for x, y in pts:
         painter.drawEllipse(QtCore.QRectF(self.points[0][0] - 4, self.points[0][1] - 4, 8, 8))
         painter.drawEllipse(QtCore.QRectF(self.points[1][0] - 4, self.points[1][1] - 4, 8, 8))
-        painter.setPen(QtGui.QPen(QtGui.QColor(QtCore.Qt.white), 1))
+        painter.setPen(QtWidgets.QPen(QtWidgets.QColor(QtCore.Qt.white), 1))
         label1 = "("+ str((self.points[0][0] - 50)/2) + "," + str(100 - ((self.points[0][1] -50)/2)) + ")"
         painter.drawText(self.points[0][0] -25, self.points[0][1] + 18, QtCore.QString(label1))
         label2 = "("+ str((self.points[1][0] - 50)/2) + "," + str(100 - ((self.points[1][1] -50)/2)) + ")"
@@ -76,11 +76,11 @@ class pressureSettings(QtGui.QWidget):
             y = event.y()
             if event.x() < 50:
                 x = 50
-            elif event.x() > 250: 
-                x = 250    
+            elif event.x() > 250:
+                x = 250
             if event.y() < 50:
                 y = 50
-            elif event.y() > 250: 
+            elif event.y() > 250:
                 y = 250
 
             self.tracking([x, y])
@@ -92,14 +92,14 @@ class pressureSettings(QtGui.QWidget):
             print "Need device to be set"
         else:
             accuratePts = str((self.points[0][0] - 50)/2) + " " + str(100 - ((self.points[0][1] -50)/2)) + \
-            " " + str((self.points[1][0] - 50)/2) + " " + str(100 - ((self.points[1][1] -50)/2))  
+            " " + str((self.points[1][0] - 50)/2) + " " + str(100 - ((self.points[1][1] -50)/2))
             self.setCommand = "xsetwacom --set \""+self.tabletName+" "+self.sensor.lower() + "\" PressureCurve \"" + accuratePts + "\""
             os.system(self.setCommand)
 
     def getSetCommand(self):
         if self.setCommand != None:
             return self.setCommand
-    
+
     def setCurPoints(self,pressure):
         self.points[0][0] = (2 * pressure[0][0]) + 50
         self.points[0][1] = 250 - (2 * pressure[0][1])
@@ -111,19 +111,19 @@ class pressureSettings(QtGui.QWidget):
 #================================================================================================
 #================================================================================================
 
-class pressureTest(QtGui.QWidget):
+class pressureTest(QtWidgets.QWidget):
     def __init__(self, tabletName, parent=None):
-        QtGui.QWidget.__init__(self, parent)
+        QtWidgets.QWidget.__init__(self, parent)
         self.setFixedSize(250, 300)
-        self.scene = QtGui.QGraphicsScene()
+        self.scene = QtWidgets.QGraphicsScene()
         self.scene.setBspTreeDepth(1)
-        self.view = QtGui.QGraphicsView(self.scene)
+        self.view = QtWidgets.QGraphicsView(self.scene)
         self.view.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.view.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.tabletName = tabletName
         self.info = pressureInfo(self.tabletName)
 
-        splitter = QtGui.QSplitter(QtCore.Qt.Vertical)
+        splitter = QtWidgets.QSplitter(QtCore.Qt.Vertical)
         splitter.addWidget(self.view)
         splitter.addWidget(self.info)
         splitter.setSizes([200, 50])
@@ -131,38 +131,38 @@ class pressureTest(QtGui.QWidget):
         splitter.handle(1).setEnabled(False)
         #print splitter.count()
 
-        testLayout = QtGui.QVBoxLayout()
+        testLayout = QtWidgets.QVBoxLayout()
         testLayout.setAlignment(QtCore.Qt.AlignBottom)
         testLayout.addWidget(splitter)
         self.setLayout(testLayout)
-        self.blank = QtGui.QPixmap(250,250)
+        self.blank = QtWidgets.QPixmap(250,250)
         self.blank.fill(QtCore.Qt.white)
-        self.pixmap_item = QtGui.QGraphicsPixmapItem(self.blank, None, self.scene)
+        self.pixmap_item = QtWidgets.QGraphicsPixmapItem(self.blank, None, self.scene)
 
     def tabletEvent(self, event):
         senId = ""
         if self.sensor == "stylus" :
-            senId = QtGui.QTabletEvent.Pen
+            senId = QtWidgets.QTabletEvent.Pen
         elif self.sensor == "eraser":
-            senId = QtGui.QTabletEvent.Eraser
+            senId = QtWidgets.QTabletEvent.Eraser
         elif self.sensor == "cursor":
-            senId = QtGui.QTabletEvent.Cursor
+            senId = QtWidgets.QTabletEvent.Cursor
         if event.pointerType() == senId:
             curpressure = event.pressure()
             if curpressure < 0:
                 curpressure += 1
             amp = int(curpressure * 50)
             color = (1 - amp/50.0) * 255
-            pen = QtGui.QPen(QtGui.QColor(color,color,color,0))
+            pen = QtWidgets.QPen(QtWidgets.QColor(color,color,color,0))
 
-            radial = QtGui.QRadialGradient(QtCore.QPointF(event.x(),event.y()),amp,QtCore.QPointF(event.xTilt() * amp/50 ,event.yTilt() * amp))
-            radial.setColorAt(0,QtGui.QColor(color,color,color,255))
-            radial.setColorAt(1,QtGui.QColor(color,color,color,0))
-            brush = QtGui.QBrush(radial)
+            radial = QtWidgets.QRadialGradient(QtCore.QPointF(event.x(),event.y()),amp,QtCore.QPointF(event.xTilt() * amp/50 ,event.yTilt() * amp))
+            radial.setColorAt(0,QtWidgets.QColor(color,color,color,255))
+            radial.setColorAt(1,QtWidgets.QColor(color,color,color,0))
+            brush = QtWidgets.QBrush(radial)
             if(amp >= 1):
                 if len(self.scene.items()) >= 50:
-                    render = QtGui.QPixmap(250,250)
-                    painter = QtGui.QPainter(render)
+                    render = QtWidgets.QPixmap(250,250)
+                    painter = QtWidgets.QPainter(render)
                     rect = QtCore.QRectF(0,0,250,250)
                     self.scene.render(painter,rect,rect,QtCore.Qt.KeepAspectRatio)
                     self.scene.clear()
@@ -178,22 +178,22 @@ class pressureTest(QtGui.QWidget):
 #================================================================================================
 #================================================================================================
 
-class pressureInfo(QtGui.QWidget):
+class pressureInfo(QtWidgets.QWidget):
     def __init__(self, tabletName, parent=None):
-        QtGui.QWidget.__init__(self, parent)
-        row1 = QtGui.QHBoxLayout()
-        row2 = QtGui.QHBoxLayout()
+        QtWidgets.QWidget.__init__(self, parent)
+        row1 = QtWidgets.QHBoxLayout()
+        row2 = QtWidgets.QHBoxLayout()
         self.tabletName=tabletName
-        self.xTilt = QtGui.QLabel("XTilt: 0.0")
-        self.yTilt = QtGui.QLabel("YTilt: 0.0")
-        self.amp = QtGui.QLabel("Amplitude: 0")
+        self.xTilt = QtWidgets.QLabel("XTilt: 0.0")
+        self.yTilt = QtWidgets.QLabel("YTilt: 0.0")
+        self.amp = QtWidgets.QLabel("Amplitude: 0")
         self.sensor = ""
 
 
         row1.addWidget(self.xTilt,0,QtCore.Qt.AlignLeft)
         row1.addWidget(self.yTilt,0,QtCore.Qt.AlignLeft)
         row2.addWidget(self.amp,0,QtCore.Qt.AlignHCenter)
-        layout = QtGui.QVBoxLayout()
+        layout = QtWidgets.QVBoxLayout()
         layout.addLayout(row1)
         layout.addLayout(row2)
         self.setLayout(layout)
@@ -203,28 +203,28 @@ class pressureInfo(QtGui.QWidget):
         self.yTilt.setText("yTilt: " + str(y))
         self.amp.setText("Amplitude: " + str(amp))
 
-class penOptions(QtGui.QWidget):
+class penOptions(QtWidgets.QWidget):
     def __init__(self, tabletName, sensor, parent=None):
-        QtGui.QWidget.__init__(self, parent)
+        QtWidgets.QWidget.__init__(self, parent)
         self.setFixedSize(250, 120)
 
         self.tabletName = tabletName
         self.sensor = sensor
-        self.buttons = QtGui.QCheckBox("Inverse Buttons")
+        self.buttons = QtWidgets.QCheckBox("Inverse Buttons")
         self.buttons.setToolTip("Inverse mouse clicks on pen")
         self.buttons.stateChanged.connect(self.buttonChange)
-        self.tiptouch = QtGui.QCheckBox("Pen Touch")
+        self.tiptouch = QtWidgets.QCheckBox("Pen Touch")
         self.tiptouch.setToolTip("When enabled, pen must touch tablet to work.\nWhen disabled, hover will register.")
         self.tiptouch.stateChanged.connect(self.tipChange)
         #layout code
-        self.mainLayout = QtGui.QVBoxLayout()
+        self.mainLayout = QtWidgets.QVBoxLayout()
         self.mainLayout.addWidget(self.penSettings())
         if sensor == 'stylus':
             self.mainLayout.addWidget(self.buttons)
         self.mainLayout.addWidget(self.tiptouch)
         self.mainLayout.setAlignment(QtCore.Qt.AlignCenter)
         self.setLayout(self.mainLayout)
-       
+
     def buttonChange(self):
         if self.buttons.isChecked():
             but1 = os.popen("xsetwacom --set \"%s %s\" Button 2 3" % (self.tabletName, self.sensor.lower()))
@@ -240,18 +240,18 @@ class penOptions(QtGui.QWidget):
             but1 = os.popen("xsetwacom --set \"%s %s\" TabletPCButton off" % (self.tabletName, self.sensor.lower()))
 
     def penSettings(self):
-        groupBox = QtGui.QGroupBox("Mode")
+        groupBox = QtWidgets.QGroupBox("Mode")
         groupBox.setAlignment(QtCore.Qt.AlignCenter)
-        self.penGroup = QtGui.QButtonGroup(groupBox)
-        self.penAbs = QtGui.QRadioButton("Absolute")
+        self.penGroup = QtWidgets.QButtonGroup(groupBox)
+        self.penAbs = QtWidgets.QRadioButton("Absolute")
         self.penAbs.setToolTip("%s maps 1:1 to mapped input area." % self.sensor.title())
-        self.penRel = QtGui.QRadioButton("Relative")
+        self.penRel = QtWidgets.QRadioButton("Relative")
         self.penRel.setToolTip("%s moves relative to when it is detected." % self.sensor.title())
 
         self.penGroup.addButton(self.penAbs)
         self.penGroup.addButton(self.penRel)
-        
-        penLayout = QtGui.QHBoxLayout()
+
+        penLayout = QtWidgets.QHBoxLayout()
         penLayout.addWidget(self.penAbs)
         penLayout.addWidget(self.penRel)
         penLayout.addStretch(1)
@@ -305,11 +305,11 @@ class penOptions(QtGui.QWidget):
     def hideButtons(self):
         self.buttons.hide()
 
-class pressure(QtGui.QWidget):
+class pressure(QtWidgets.QWidget):
     def __init__(self, name, sensor, parent=None):
-        QtGui.QWidget.__init__(self, parent)
+        QtWidgets.QWidget.__init__(self, parent)
         self.setFixedSize(650, 400)
-        left = QtGui.QVBoxLayout()
+        left = QtWidgets.QVBoxLayout()
         if name is None:
             return
         self.tabletName = name.replace('Pad', 'Pen')
@@ -322,7 +322,7 @@ class pressure(QtGui.QWidget):
         self.pen = penOptions(self.tabletName, sensor)
 
         left.addWidget(self.pen)
-        grid = QtGui.QHBoxLayout()
+        grid = QtWidgets.QHBoxLayout()
         grid.addLayout(left, QtCore.Qt.AlignTop)
         if self.sensor in ['stylus', 'eraser']:
             grid.addWidget(self.test)

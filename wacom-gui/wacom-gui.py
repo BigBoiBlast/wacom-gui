@@ -1,8 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from PyQt4.QtCore import * 
-from PyQt4.QtGui import *
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
+from PyQt5.QtWidgets import *
 import sys
 import os
 from os.path import expanduser
@@ -14,6 +15,9 @@ from wacom_data import Tablets
 import wacom_menu
 from pad import Pad, Touch
 from stylus import Stylus
+
+def QString(x):
+  return x
 
 class WacomGui(QMainWindow, wacom_menu.Ui_MainWindow):
     buttonClicked = pyqtSignal(int)
@@ -196,7 +200,7 @@ class WacomGui(QMainWindow, wacom_menu.Ui_MainWindow):
             try:
                 os.remove(conf_path)
             except Exception as e:
-                print e
+                print(e)
             del self.configs[self.dev][self.config]
             self.getConfigs(0)
 
@@ -502,11 +506,14 @@ class ButtonGroup(QObject):
         select = False
         idx = self.buttons.__len__() / 4
         self.buttons[(idx, 0)] = QToolButton()
-        self.btn_grp.addButton(self.buttons[(idx, 0)], idx)
+        self.btn_grp.addButton(self.buttons[(idx, 0)], int(idx))
         self.buttons[(idx, 1)] = dev
         self.buttons[(idx, 2)] = wid
         self.buttons[(idx, 3)] = dev_id
-        self.buttons[(idx, 0)].clicked[()].connect(self.buttonMapper.map)
+        try:
+          self.buttons[(idx, 0)].clicked[()].connect(self.buttonMapper.map)
+        except Exception as e:
+          print(e)
         if label.split("Wacom ").__len__() == 2:
             self.buttons[(idx, 0)].setText(QString(label[6:]))
         else:
@@ -517,7 +524,7 @@ class ButtonGroup(QObject):
             self.buttons[(idx, 0)].setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
         self.buttons[(idx, 0)].setMinimumSize(QSize(80, 70))
         self.buttons[(idx, 0)].setMaximumSize(QSize(120, 90))
-        self.buttonMapper.setMapping(self.buttons[(idx, 0)], idx)
+        self.buttonMapper.setMapping(self.buttons[(idx, 0)], int(idx))
         self.buttons[(idx, 0)].setCheckable(True)
         self.buttons[(idx, 0)].setStyleSheet(self.btn_style)
         # set first button as selected
@@ -608,17 +615,17 @@ class About(QDialog):
         self.text = QTextEdit()
         self.text.setAlignment(Qt.AlignHCenter)
         self.text.setReadOnly(True)
-        self.text.insertPlainText("""This utility is designed to help you easily configure your wacom tablet under linux.  
-        
+        self.text.insertPlainText("""This utility is designed to help you easily configure your wacom tablet under linux.
+
 For support, please open a support ticket:
 https://github.com/tb2097/wacom-gui/issues
 
-GUI written by:    
+GUI written by:
 Travis Best (tb2097); Nov. 2018
 [GPL 3.0]
-    
-Hand Icons by: 
-https://www.flaticon.com/authors/mobiletuxedo 
+
+Hand Icons by:
+https://www.flaticon.com/authors/mobiletuxedo
 [CC 3.0]""")
         self.text.setFrameShape(QFrame.WinPanel)
         self.text.setFrameShadow(QFrame.Plain)

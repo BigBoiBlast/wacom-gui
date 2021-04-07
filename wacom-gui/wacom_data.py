@@ -18,8 +18,8 @@ import xml.etree.ElementTree as ET
 import math
 import copy
 import sys
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
 
 
 class Tablets:
@@ -36,7 +36,7 @@ class Tablets:
     def get_connected_tablets(self):
         # check if tablet is actually detected
         p = subprocess.Popen("xsetwacom --list devices", shell=True, stdout=subprocess.PIPE)
-        dev_names = p.communicate()[0].split('\n')
+        dev_names = p.communicate()[0].splitlines()
         # all devices must have a pad, use this as unique identifier
         detected = {}
         attr = {'type: TOUCH': 'touch',
@@ -46,6 +46,7 @@ class Tablets:
                 'type: PAD': 'pad'}
         try:
             for dev in dev_names:
+                dev = dev.decode('UTF-8')
                 dev_attr = dev.rstrip().split("\t")
                 name = dev.rsplit(' %s' % attr[dev_attr[2]], 1)[0]
                 if name[-3:] in ["Pen", "Pad"]:
@@ -62,7 +63,7 @@ class Tablets:
             pass
         self.__get_libwacom_data()
         self.tablets = {}
-        for device, inputs in detected.iteritems():
+        for device, inputs in detected.items(): #detected.iteritems():
             if device[-4:] == '(WL)':
                 dev_type = device[:-5]
             else:
@@ -114,10 +115,11 @@ class Tablets:
     def __get_libwacom_data(self):
         p = subprocess.Popen("libwacom-list-local-devices --database %s" % self.db_path, shell=True,
                              stdout=subprocess.PIPE)
-        output = p.communicate()[0].split('\n')
+        output = p.communicate()[0].splitlines()
         cur_device = None
         buttons = False
         for line in output:
+            line = line.decode('UTF-8')
             if line == '[Device]':
                 cur_device = None
                 buttons = False

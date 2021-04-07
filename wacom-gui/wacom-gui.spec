@@ -1,12 +1,12 @@
 Name: wacom-gui
 Version: 0.2.1
 Release: 3
-Summary: Wacom PyQt4 GUI
+Summary: Wacom PyQt5 GUI
 License: GPLv3
 BuildArch: noarch
 URL: https://github.com/tb2097/wacom-gui
-Requires: PyQt4 
-Requires: PyQt4-webkit 
+Requires: PyQt5
+Requires: PyQt5-webkit
 Requires: qtwebkit
 Requires: xorg-x11-server-utils
 Requires: xorg-x11-drv-wacom
@@ -21,7 +21,7 @@ Source0: %{name}-%{version}.tar.gz
 Source1: wacom.desktop
 
 %description
-Wacom PyQt4 GUI
+Wacom PyQt5 GUI
 
 %prep
 %setup -q -n wacom-gui-master
