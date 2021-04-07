@@ -445,6 +445,7 @@ class Mapping(QWidget):
         self.settings = {}
         self.displays = None
         self.main = QVBoxLayout()
+
         self.lorient = QHBoxLayout()
         self.orient = QComboBox()
         self.orient.addItems(['ExpressKeys Left', 'ExpressKeys Right', 'ExpressKeys Up', 'ExpressKeys Down'])
@@ -452,6 +453,7 @@ class Mapping(QWidget):
         self.orient_lbl = QLabel("Orientation:")
         self.lorient.addWidget(self.orient_lbl)
         self.lorient.addWidget(self.orient)
+
         self.mode_group = QButtonGroup()
         self.mode_pen = QRadioButton('Pen')
         self.mode_mouse = QRadioButton("Mouse")
@@ -466,6 +468,7 @@ class Mapping(QWidget):
         self.lmode.addWidget(self.mode_pen)
         self.lmode.addWidget(self.mode_mouse)
         self.mode_box.setLayout(self.lmode)
+
         self.main.addLayout(self.lorient)
         self.main.addWidget(self.mode_box)
         self.lscreen = QGridLayout()
